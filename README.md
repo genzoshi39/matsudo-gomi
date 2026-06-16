@@ -1,50 +1,33 @@
 # 松戸市古ケ崎 ごみ出し通知
 
-GitHub Pagesで公開するための静的サイトです。
+GitHub Pagesで公開するための静的Webアプリです。
 
 ## ファイル
 
-- `index.html`: ごみ出し通知Webアプリ
-- `matsudo-gomi-schedule.json`: Alexa Skillが読む収集ルール
+- `index.html`: 画面構造
+- `styles.css`: 見た目
+- `app.js`: カレンダー、通知、収集ルールの処理
 
 ## 公開手順
 
-1. GitHubで新しいリポジトリを作成します。
-   - 例: `matsudo-gomi`
-   - PublicでもPrivateでも構いません。GitHub Pagesを無料で使うならPublicが簡単です。
-2. このフォルダの中身をリポジトリ直下にアップロードします。
-3. GitHubのリポジトリ画面で `Settings` → `Pages` を開きます。
-4. `Build and deployment` の `Source` を `Deploy from a branch` にします。
-5. Branchを `main`、Folderを `/root` にして保存します。
-6. 数十秒から数分待つと、Pages URLが表示されます。
+1. GitHubのリポジトリを開きます。
+2. リポジトリ直下に、このフォルダの `index.html`、`styles.css`、`app.js` をアップロードします。
+3. `Commit changes` を押します。
+4. GitHub PagesのActionsが終わるまで待ちます。
+5. 公開URLを開いて表示を確認します。
 
-URLはこの形になります。
+URLはこの形です。
 
 ```text
 https://YOUR_GITHUB_USER.github.io/matsudo-gomi/
 ```
 
-Alexa用JSONはこのURLです。
-
-```text
-https://YOUR_GITHUB_USER.github.io/matsudo-gomi/matsudo-gomi-schedule.json
-```
-
-## Alexa側の設定
-
-AWS Lambdaの環境変数 `SCHEDULE_URL` に、上のJSON URLを設定します。
-
-```text
-SCHEDULE_URL=https://YOUR_GITHUB_USER.github.io/matsudo-gomi/matsudo-gomi-schedule.json
-```
-
-## 日程を更新するとき
+## 使い方
 
 1. 公開されたWebアプリを開きます。
-2. 収集ルールを修正します。
-3. `Alexa連携JSON` を押して `matsudo-gomi-schedule.json` をダウンロードします。
-4. GitHubで既存の `matsudo-gomi-schedule.json` を置き換えます。
-5. Alexaに「今日のごみ」と聞いて確認します。
+2. 収集ルールを正しい曜日に修正します。
+3. 今日・明日・表示月の予定を確認します。
+4. `カレンダー連携` を押すと、スマホやGoogleカレンダーに取り込める `.ics` ファイルを書き出せます。
 
 ## 注意
 
