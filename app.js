@@ -5,7 +5,7 @@ let visibleMonth = new Date();
 visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), 1, 12);
 
 const defaultState = {
-  area: "千葉県松戸市古ケ崎47周辺",
+  area: "松戸市",
   evening: "20:00",
   morning: "07:00",
   memo: "松戸市の公式ごみ出しカレンダーで地区を確認してから、下の収集ルールを修正してください。",
@@ -178,7 +178,7 @@ function maybeNotify(now, hhmm, dateKey, type, events, title) {
 async function exportIcs() {
   save();
   const icsText = buildIcs();
-  const fileName = "matsudo-gomi-calendar.ics";
+  const fileName = "gomi-calendar.ics";
   const blob = new Blob([icsText], { type: "text/calendar;charset=utf-8" });
   const file = new File([blob], fileName, { type: "text/calendar" });
 
