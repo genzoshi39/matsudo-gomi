@@ -175,34 +175,69 @@ function maybeNotify(now, hhmm, dateKey, type, events, title) {
   }
 }
 
-function exportIcs() {
+async function exportIcs() {
+  save();
+  const icsText = buildIcs();
+  const fileName = "matsudo-gomi-calendar.ics";
+  const blob = new Blob([icsText], { type: "text/calendar;charset=utf-8" });
+  const file = new File([blob], fileName, { type: "text/calendar" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "ごみ出しカレンダー",
+        text: "ごみ出し予定をカレンダーに追加します。"
+      });
+      $("notifyNote").textContent = "共有先でカレンダーを選ぶと予定を追加できます。";
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+    }
+  }
+
+  const url = URL.createObjectURL(blob);
+  const opened = window.open(url, "_blank");
+  if (!opened) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+  $("notifyNote").textContent = "カレンダー連携ファイルを開きました。表示された画面で追加または共有してください。";
+  setTimeout(() => URL.revokeObjectURL(url), 60 * 1000);
+}
+
+function buildIcs() {
   const now = new Date();
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Matsudo Gomi Notifier//JA"
+    "PRODID:-//Matsudo Gomi Notifier//JA",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "X-WR-CALNAME:ごみ出し予定"
   ];
   for (let offset = 0; offset < 120; offset++) {
     const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset);
+    const endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     for (const event of eventsFor(date)) {
       const start = `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`;
+      const end = `${endDate.getFullYear()}${pad(endDate.getMonth() + 1)}${pad(endDate.getDate())}`;
       lines.push("BEGIN:VEVENT");
       lines.push(`UID:${event.id}-${start}@matsudo-gomi`);
       lines.push(`DTSTAMP:${start}T000000Z`);
       lines.push(`DTSTART;VALUE=DATE:${start}`);
+      lines.push(`DTEND;VALUE=DATE:${end}`);
       lines.push(`SUMMARY:${escapeIcs(event.name)}`);
       lines.push(`DESCRIPTION:${escapeIcs(`${state.area} ${event.desc || ""}`)}`);
       lines.push("END:VEVENT");
     }
   }
   lines.push("END:VCALENDAR");
-  const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "matsudo-gomi-calendar.ics";
-  a.click();
-  URL.revokeObjectURL(url);
+  return lines.join("\r\n");
 }
 
 function escapeIcs(value) {
