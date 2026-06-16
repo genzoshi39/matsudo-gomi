@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>松戸市古ケ崎 ごみ出し通知</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>松戸市古ケ崎 ごみ出し通知</h1>
+        <p class="subtitle">住所を毎回調べ直さなくていいように、収集パターンを保存して今日・明日・今月分をすぐ確認できます。</p>
+      </div>
+      <div class="badge">公式日程は要確認</div>
+    </header>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>今日と明日</h2>
+        <div class="today">
+          <div class="daybox">
+            <div class="date" id="todayDate"></div>
+            <div id="todayGarbage"></div>
+          </div>
+          <div class="daybox">
+            <div class="date" id="tomorrowDate"></div>
+            <div id="tomorrowGarbage"></div>
+          </div>
+        </div>
+        <div class="buttonbar">
+          <button id="notifyBtn">通知を許可</button>
+          <button class="secondary" id="testBtn">テスト通知</button>
+          <button class="secondary" id="icsBtn">カレンダー連携</button>
+        </div>
+        <p class="note" id="notifyNote">ブラウザ通知は、このページを開いている間に確認します。スマホではホーム画面に追加して使うと見やすいです。</p>
+      </div>
+
+      <div class="panel">
+        <h2>通知設定</h2>
+        <div class="controls">
+          <label>地域メモ
+            <input id="areaInput" value="千葉県松戸市古ケ崎47周辺">
+          </label>
+          <div class="row">
+            <label>前日通知
+              <input id="eveningInput" type="time" value="20:00">
+            </label>
+            <label>当日通知
+              <input id="morningInput" type="time" value="07:00">
+            </label>
+          </div>
+          <label>メモ
+            <textarea id="memoInput">松戸市の公式ごみ出しカレンダーで地区を確認してから、下の収集ルールを修正してください。</textarea>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="calendar-head">
+          <h2 id="calendarTitle">今月の予定</h2>
+          <div class="calendar-actions" aria-label="表示月の切り替え">
+            <button class="icon-button" id="prevMonthBtn" title="前月" aria-label="前月">‹</button>
+            <button class="secondary" id="currentMonthBtn">今月</button>
+            <button class="icon-button" id="nextMonthBtn" title="翌月" aria-label="翌月">›</button>
+          </div>
+        </div>
+        <div class="calendar" id="calendar"></div>
+      </div>
+
+      <div class="panel">
+        <h2>収集ルール</h2>
+        <div class="controls">
+          <label>種類
+            <input id="nameInput" placeholder="例: 燃やせるごみ">
+          </label>
+          <div class="row">
+            <label>曜日
+              <select id="weekdayInput">
+                <option value="1">月</option>
+                <option value="2">火</option>
+                <option value="3">水</option>
+                <option value="4">木</option>
+                <option value="5">金</option>
+                <option value="6">土</option>
+                <option value="0">日</option>
+              </select>
+            </label>
+            <label>週
+              <select id="weekInput">
+                <option value="every">毎週</option>
+                <option value="1">第1</option>
+                <option value="2">第2</option>
+                <option value="3">第3</option>
+                <option value="4">第4</option>
+                <option value="5">第5</option>
+              </select>
+            </label>
+          </div>
+          <label>出し方メモ
+            <input id="descInput" placeholder="例: 朝8時30分まで">
+          </label>
+          <div class="buttonbar">
+            <button id="addBtn">追加</button>
+            <button class="warn" id="resetBtn">初期化</button>
+          </div>
+        </div>
+        <div class="schedule" id="scheduleList"></div>
+        <div class="official">
+          公式確認先: <a href="https://www.city.matsudo.chiba.jp/kurashi/gomi_shinyou/index.html" target="_blank" rel="noreferrer">松戸市 ごみ・リサイクル・し尿</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
